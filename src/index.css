@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@import url("https://fonts.googleapis.com/css2?family=Nunito:wght@500;600;700&display=swap");
+
+.right-side {
+  background: url("./assets/mountain2.jpeg");
+  background-size: cover;
+}
