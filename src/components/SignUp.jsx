@@ -1,5 +1,7 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import { HiMiniEye, HiEyeSlash } from "react-icons/hi2";
+import { auth } from "../api/firebase";
 
 function SignUp({ setIsSignIn }) {
   const defaultData = {
@@ -14,6 +16,17 @@ function SignUp({ setIsSignIn }) {
     setSignUpData({ ...signUpData, [e.target.name]: e.target.value });
   };
 
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const email = signUpData.email;
+    const password = signUpData.password;
+    if(email && password) signUpUser(email, password);
+  }
+
+  const signUpUser = (email, password) => {
+    createUserWithEmailAndPassword(auth, email, password)
+  }
+
 
   return (
     <div className="flex h-full">
@@ -25,7 +38,7 @@ function SignUp({ setIsSignIn }) {
           <p className="font-['Nunito', sans-serif] font-semibold text-[18px] mt-4 text-slate-500 text-center">
             The Faster You Fill Up The Faster You Enjoying!
           </p>
-          <form className="flex flex-col mt-3">
+          <form className="flex flex-col mt-3" onSubmit={onSubmit}>
             <label className="flex flex-col font-['Nunito', sans-serif] font-semibold text-[18px]">
               <span>Name</span>
               <input

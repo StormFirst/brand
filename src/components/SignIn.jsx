@@ -1,7 +1,12 @@
-
+import {
+  GoogleAuthProvider,
+  signInWithEmailAndPassword,
+  signInWithPopup,
+} from "firebase/auth";
 import React, { useState } from "react";
 import { FcGoogle } from "react-icons/fc";
 import { HiMiniEye, HiEyeSlash } from "react-icons/hi2";
+import { auth } from "../api/firebase";
 
 function SignIn({ setIsSignIn }) {
   const defaultData = {
@@ -15,7 +20,27 @@ function SignIn({ setIsSignIn }) {
     setSignInData({ ...signInData, [e.target.name]: e.target.value });
   };
 
-  
+  const onSubmit = (e) => {
+    e.preventDefault();
+    const email = signInData.email;
+    const password = signInData.password;
+    if (email && password) signInUser(email, password);
+  };
+
+  const signInUser = (email, password) => {
+    signInWithEmailAndPassword(auth, email, password);
+  };
+
+  const provider = new GoogleAuthProvider();
+  provider.setCustomParameters({
+    prompt: "select_account",
+  });
+
+  const signInWithGooglePopup = () => signInWithPopup(auth, provider);
+
+  const signInWithGoogle = async () => {
+    await signInWithGooglePopup();
+  };
 
   return (
     <div className="flex h-full">
@@ -27,7 +52,7 @@ function SignIn({ setIsSignIn }) {
           <p className="font-['Nunito', sans-serif] font-semibold text-[18px] mt-4 text-slate-500 text-center">
             The Faster You Fill Up The Faster You Enjoying!
           </p>
-          <form className="flex flex-col mt-3" >
+          <form className="flex flex-col mt-3" onSubmit={onSubmit}>
             <label className="flex flex-col font-['Nunito', sans-serif] font-semibold text-[18px]">
               <span>Email</span>
               <input
@@ -73,6 +98,7 @@ function SignIn({ setIsSignIn }) {
             </button>
             <button
               className="mt-2 py-2 rounded-md border border-black font-['Nunito', sans-serif] font-semibold text-[18px] flex items-center justify-center gap-3"
+              onClick={signInWithGoogle}
             >
               <FcGoogle size="22px" />
               <span>Sign In With Google</span>
